@@ -18,7 +18,8 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 | 集 | 資料夾 | 內容 | 影片 | 文章 |
 | --- | --- | --- | --- | --- |
 | 0 | — | 總覽：遊戲裡的海是怎麼做出來的（沒有範例專案） | [YouTube](https://www.youtube.com/watch?v=GWMWLkf4mzU) | [部落格](https://dev-mojo.blogspot.com/2026/11/godot-crest.html) |
-| 1 | [ep01-first-sea](ep01-first-sea/) | 裝好 Godot，不寫程式，搭出第一片會動的海：天空、太陽、海面材質、法線貼圖、AnimationPlayer | 即將推出 | 即將推出 |
+| 1 | [ep01-first-sea](ep01-first-sea/) | 裝好 Godot，不寫程式，搭出第一片會動的海：天空、太陽、海面材質、法線貼圖、AnimationPlayer | [YouTube](https://www.youtube.com/watch?v=GptVdkdfVzY) | 即將推出 |
+| 2 | [ep02-buoys](ep02-buoys/) | 第一次寫程式：用 GDScript 和 sin 波，讓 400 顆浮標排出一片會起伏的海 | 即將推出 | 即將推出 |
 
 ## 第 1 集：搭出第一片海
 
@@ -31,6 +32,19 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 | Sea（MeshInstance3D） | 海面 | PlaneMesh 2000 × 2000；StandardMaterial3D：顏色 #0b3954、Roughness 0.05、NoiseTexture2D 法線貼圖、UV1 Scale 100 |
 | Camera3D | 相機 | 位置 Y 5、往下 4°、Far 10000 |
 | AnimationPlayer | 讓波紋流動 | 動畫 `flow`：10 秒循環，材質 UV1 Offset 從 (0, 0, 0) 到 (1, 0, 0) |
+
+## 第 2 集：用 400 顆浮標做出第一道浪
+
+![第 2 集成果：400 顆浮標排出的海](images/ep02-preview.gif)
+
+接續第 1 集的海，加上一個 `Buoys` 節點和腳本 `buoys.gd`（每行都有中文註解）：
+
+- `_ready()`：用兩層 for 迴圈排出 20 × 20 顆浮標
+- `_process()`：每一幀依照時間更新每顆浮標的高度
+- `sine_wave()`：一個 sin 波（振幅、波長、速度）
+- `wave_height()`：把三個方向、大小不同的波加起來
+
+選取 Buoys，可以在屬性檢視器調整 Grid Size、Spacing、Amplitude、Wavelength、Speed。
 
 ## 授權
 

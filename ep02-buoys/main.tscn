@@ -1,0 +1,82 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://buoys.gd" id="1_buoys"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+
+[sub_resource type="Sky" id="Sky_sky"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_env"]
+background_mode = 2
+sky = SubResource("Sky_sky")
+tonemap_mode = 2
+fog_enabled = true
+fog_density = 0.0012
+fog_sky_affect = 0.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_noise"]
+frequency = 0.02
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ripples"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_noise")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_water"]
+albedo_color = Color(0.0431373, 0.223529, 0.329412, 1)
+roughness = 0.05
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_ripples")
+uv1_scale = Vector3(100, 100, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_sea"]
+size = Vector2(2000, 2000)
+
+[sub_resource type="Animation" id="Animation_flow"]
+resource_name = "flow"
+length = 10.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sea:material_override:uv1_offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(1, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_main"]
+_data = {
+&"flow": SubResource("Animation_flow")
+}
+
+[node name="MyOcean" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, 0.433013, -0.75, 0, 50, 0)
+
+[node name="Sea" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_sea")
+material_override = SubResource("StandardMaterial3D_water")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 11, -2)
+far = 10000.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_main")
+}
+autoplay = "flow"
+
+[node name="Buoys" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -26)
+script = ExtResource("1_buoys")
