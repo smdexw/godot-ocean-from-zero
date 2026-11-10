@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://wave_lab.gd" id="1_lab"]
+
+[sub_resource type="Environment" id="Environment_dark"]
+background_mode = 1
+background_color = Color(0.2, 0.36, 0.5, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.5, 0.55, 0.6, 1)
+fog_enabled = true
+fog_light_color = Color(0.2, 0.36, 0.5, 1)
+fog_density = 0.03
+fog_sky_affect = 0.0
+
+[node name="Wireframe" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dark")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, 0.433013, -0.75, 0, 50, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.951057, 0.309017, 0, -0.309017, 0.951057, 0, 7, 4)
+far = 500.0
+
+[node name="WaveLab" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+script = ExtResource("1_lab")
+grid_lines = true
+line_samples = 60
+line_color = Color(0.47, 0.78, 0.92, 1)
+buoy_color = Color(0.95, 0.76, 0.3, 1)
+buoy_size = 0.14
+grid_size = 24
+amplitude = 1.2

@@ -46,6 +46,18 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 
 選取 Buoys，可以在屬性檢視器調整 Grid Size、Spacing、Amplitude、Wavelength、Speed。
 
+### 加碼場景
+
+| 場景 | 內容 |
+| --- | --- |
+| `main.tscn` | 主教學：浮標加三個 sin 波（`buoys.gd`） |
+| `wave_lab.tscn` | 造浪實驗室（`wave_lab.gd`）：選取 WaveLab，在屬性檢視器切換 Mode（SINE、SHARP 尖峰波、GERSTNER、NOISE 雜訊、RIPPLE 圓形漣漪），打開 Show Lines 用線段畫出波形，調 Line Samples 看取樣點數的差別 |
+| `wireframe.tscn` | 重現第 0 集那張會動的網子：橫向、直向都畫線段，深藍色背景加霧 |
+
+![第 0 集風格的網子](images/ep02-wireframe.gif)
+
+要打開加碼場景：在 Godot 左下角檔案系統雙擊 `wave_lab.tscn` 或 `wireframe.tscn`，再按 **F6** 執行目前的場景。
+
 ## 授權
 
 範例專案以 MIT 授權釋出，可以自由使用、修改，也可以用在你自己的遊戲裡。
