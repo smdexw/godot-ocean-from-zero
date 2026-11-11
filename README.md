@@ -20,6 +20,7 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 | 0 | — | 總覽：遊戲裡的海是怎麼做出來的（沒有範例專案） | [YouTube](https://www.youtube.com/watch?v=GWMWLkf4mzU) | [部落格](https://dev-mojo.blogspot.com/2026/11/godot-crest.html) |
 | 1 | [ep01-first-sea](ep01-first-sea/) | 裝好 Godot，不寫程式，搭出第一片會動的海：天空、太陽、海面材質、法線貼圖、AnimationPlayer | [YouTube](https://www.youtube.com/watch?v=GptVdkdfVzY) | 即將推出 |
 | 2 | [ep02-buoys](ep02-buoys/) | 第一次寫程式：用 GDScript 和 sin 波，讓 400 顆浮標排出一片會起伏的海 | 即將推出 | 即將推出 |
+| 3 | [ep03-first-shader](ep03-first-shader/) | 第一個 shader：把浪搬進顯示卡，海面的顏色跟著浮標的浪起伏；附 8 個 shader 小範例 | 即將推出 | 即將推出 |
 
 ## 第 1 集：搭出第一片海
 
@@ -57,6 +58,30 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 ![第 0 集風格的網子](images/ep02-wireframe.gif)
 
 要打開加碼場景：在 Godot 左下角檔案系統雙擊 `wave_lab.tscn` 或 `wireframe.tscn`，再按 **F6** 執行目前的場景。
+
+## 第 3 集：第一個 Shader，讓顯示卡畫海
+
+![第 3 集成果：海面顏色跟著浪起伏](images/ep03-preview.gif)
+
+接續第 2 集的浮標，海面換成自己寫的 shader `water.gdshader`（每行都有中文註解）：
+
+- `sine_wave()`、`wave_height()`：和第 2 集 `buoys.gd` 一模一樣的三個 sin 波，翻譯成 shader 語言
+- `fragment()`：把 UV 換算成公尺、對齊浮標方陣，浪越高顏色越亮
+- 細小的波紋用 `TIME` 讓法線貼圖滑動，不需要 AnimationPlayer
+
+選取 Sea，展開 Material Override 的 **Shader Parameters**，可以調顏色、浪的大小和波紋。
+
+| 檔案 | 內容 |
+| --- | --- |
+| `main.tscn` | 主教學：浮標加上 shader 海面 |
+| `water.gdshader` | 完成的海面 shader |
+| `steps/water_A` 到 `water_E` | 文章裡一步一步的版本：單色 → UV → TIME → 一道浪 → 三個波。把 Sea 材質的 Shader 換成其中一個，就能看到那一步的樣子 |
+| `shader_gallery.tscn` | 小教室：8 個 shader 小範例排在一起 |
+| `examples/01` 到 `08` | 單色、UV 漸層、隨時間變色、棋盤格、圓形漣漪、邊緣發光、溶解消失、頂點擺動 |
+
+![8 個 shader 小範例](images/ep03-gallery.jpg)
+
+要打開範例展示：在 Godot 左下角檔案系統雙擊 `shader_gallery.tscn`，再按 **F6** 執行目前的場景。
 
 ## 授權
 

@@ -1,0 +1,212 @@
+[gd_scene load_steps=29 format=3]
+
+[ext_resource type="Shader" path="res://examples/01_solid.gdshader" id="s1"]
+[ext_resource type="Shader" path="res://examples/02_uv_gradient.gdshader" id="s2"]
+[ext_resource type="Shader" path="res://examples/03_time_color.gdshader" id="s3"]
+[ext_resource type="Shader" path="res://examples/04_checker.gdshader" id="s4"]
+[ext_resource type="Shader" path="res://examples/05_rings.gdshader" id="s5"]
+[ext_resource type="Shader" path="res://examples/06_rim_glow.gdshader" id="s6"]
+[ext_resource type="Shader" path="res://examples/07_dissolve.gdshader" id="s7"]
+[ext_resource type="Shader" path="res://examples/08_wobble.gdshader" id="s8"]
+
+[sub_resource type="SystemFont" id="font_cjk"]
+font_names = PackedStringArray("Microsoft JhengHei", "Noto Sans CJK TC", "PingFang TC", "sans-serif")
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 1
+background_color = Color(0.2, 0.36, 0.5, 1)
+sky = SubResource("sky")
+ambient_light_source = 3
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="ShaderMaterial" id="mat1"]
+shader = ExtResource("s1")
+
+[sub_resource type="SphereMesh" id="mesh1"]
+radius = 0.9
+height = 1.8
+
+[sub_resource type="ShaderMaterial" id="mat2"]
+shader = ExtResource("s2")
+
+[sub_resource type="PlaneMesh" id="mesh2"]
+size = Vector2(2.2, 2.2)
+
+[sub_resource type="ShaderMaterial" id="mat3"]
+shader = ExtResource("s3")
+
+[sub_resource type="SphereMesh" id="mesh3"]
+radius = 0.9
+height = 1.8
+
+[sub_resource type="ShaderMaterial" id="mat4"]
+shader = ExtResource("s4")
+
+[sub_resource type="PlaneMesh" id="mesh4"]
+size = Vector2(2.2, 2.2)
+
+[sub_resource type="ShaderMaterial" id="mat5"]
+shader = ExtResource("s5")
+
+[sub_resource type="PlaneMesh" id="mesh5"]
+size = Vector2(2.2, 2.2)
+
+[sub_resource type="ShaderMaterial" id="mat6"]
+shader = ExtResource("s6")
+
+[sub_resource type="SphereMesh" id="mesh6"]
+radius = 0.9
+height = 1.8
+
+[sub_resource type="FastNoiseLite" id="noise_dissolve"]
+frequency = 0.03
+
+[sub_resource type="NoiseTexture2D" id="tex_dissolve"]
+seamless = true
+noise = SubResource("noise_dissolve")
+
+[sub_resource type="ShaderMaterial" id="mat7"]
+shader = ExtResource("s7")
+shader_parameter/noise_texture = SubResource("tex_dissolve")
+
+[sub_resource type="SphereMesh" id="mesh7"]
+radius = 0.9
+height = 1.8
+
+[sub_resource type="ShaderMaterial" id="mat8"]
+shader = ExtResource("s8")
+
+[sub_resource type="PlaneMesh" id="mesh8"]
+size = Vector2(2.2, 2.2)
+subdivide_width = 64
+subdivide_depth = 64
+
+[node name="ShaderGallery" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, 0.433013, -0.75, 0, 10, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.829038, 0.559193, 0, -0.559193, 0.829038, 0, 8.5, 10.5)
+fov = 52.0
+
+[node name="Ex1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 0.9, -2.5)
+mesh = SubResource("mesh1")
+material_override = SubResource("mat1")
+
+[node name="Label1" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 0.05, -0.95)
+pixel_size = 0.006
+billboard = 1
+text = "1 單色"
+font = SubResource("font_cjk")
+font_size = 56
+outline_size = 16
+
+[node name="Ex2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 0.02, -2.5)
+mesh = SubResource("mesh2")
+material_override = SubResource("mat2")
+
+[node name="Label2" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 0.05, -0.95)
+pixel_size = 0.006
+billboard = 1
+text = "2 UV 漸層"
+font = SubResource("font_cjk")
+font_size = 56
+outline_size = 16
+
+[node name="Ex3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0.9, -2.5)
+mesh = SubResource("mesh3")
+material_override = SubResource("mat3")
+
+[node name="Label3" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0.05, -0.95)
+pixel_size = 0.006
+billboard = 1
+text = "3 隨時間變色"
+font = SubResource("font_cjk")
+font_size = 56
+outline_size = 16
+
+[node name="Ex4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.25, 0.02, -2.5)
+mesh = SubResource("mesh4")
+material_override = SubResource("mat4")
+
+[node name="Label4" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.25, 0.05, -0.95)
+pixel_size = 0.006
+billboard = 1
+text = "4 棋盤格"
+font = SubResource("font_cjk")
+font_size = 56
+outline_size = 16
+
+[node name="Ex5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 0.02, 2.0)
+mesh = SubResource("mesh5")
+material_override = SubResource("mat5")
+
+[node name="Label5" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 0.05, 3.55)
+pixel_size = 0.006
+billboard = 1
+text = "5 圓形漣漪"
+font = SubResource("font_cjk")
+font_size = 56
+outline_size = 16
+
+[node name="Ex6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 0.9, 2.0)
+mesh = SubResource("mesh6")
+material_override = SubResource("mat6")
+
+[node name="Label6" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 0.05, 3.55)
+pixel_size = 0.006
+billboard = 1
+text = "6 邊緣發光"
+font = SubResource("font_cjk")
+font_size = 56
+outline_size = 16
+
+[node name="Ex7" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0.9, 2.0)
+mesh = SubResource("mesh7")
+material_override = SubResource("mat7")
+
+[node name="Label7" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0.05, 3.55)
+pixel_size = 0.006
+billboard = 1
+text = "7 溶解消失"
+font = SubResource("font_cjk")
+font_size = 56
+outline_size = 16
+
+[node name="Ex8" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.25, 0.02, 2.0)
+mesh = SubResource("mesh8")
+material_override = SubResource("mat8")
+
+[node name="Label8" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.25, 0.05, 3.55)
+pixel_size = 0.006
+billboard = 1
+text = "8 頂點擺動"
+font = SubResource("font_cjk")
+font_size = 56
+outline_size = 16

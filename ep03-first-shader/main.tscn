@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://buoys.gd" id="1_buoys"]
+[ext_resource type="Shader" path="res://water.gdshader" id="2_water"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+
+[sub_resource type="Sky" id="Sky_sky"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_env"]
+background_mode = 2
+sky = SubResource("Sky_sky")
+tonemap_mode = 2
+fog_enabled = true
+fog_density = 0.0012
+fog_sky_affect = 0.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_noise"]
+frequency = 0.02
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ripples"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_noise")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_water"]
+render_priority = 0
+shader = ExtResource("2_water")
+shader_parameter/ripple_texture = SubResource("NoiseTexture2D_ripples")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_sea"]
+size = Vector2(2000, 2000)
+
+[node name="MyOcean" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, 0.433013, -0.75, 0, 50, 0)
+
+[node name="Sea" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_sea")
+material_override = SubResource("ShaderMaterial_water")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 11, -2)
+far = 10000.0
+
+[node name="Buoys" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -26)
+script = ExtResource("1_buoys")
