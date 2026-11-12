@@ -78,10 +78,15 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 | `steps/water_A` 到 `water_E` | 文章裡一步一步的版本：單色 → UV → TIME → 一道浪 → 三個波。把 Sea 材質的 Shader 換成其中一個，就能看到那一步的樣子 |
 | `shader_gallery.tscn` | 小教室：8 個 shader 小範例排在一起 |
 | `examples/01` 到 `08` | 單色、UV 漸層、隨時間變色、棋盤格、圓形漣漪、邊緣發光、溶解消失、頂點擺動 |
+| `classroom/01_solid.tscn` 到 `08_wobble.tscn` | 小教室影片用的特寫場景：一個場景只放一個範例，按 F6 單獨執行 |
 
 ![8 個 shader 小範例](images/ep03-gallery.jpg)
 
 要打開範例展示：在 Godot 左下角檔案系統雙擊 `shader_gallery.tscn`，再按 **F6** 執行目前的場景。
+
+### 小教室：8 個範例怎麼做、為什麼這樣做
+
+第 3 集另外有一支小教室影片，一個一個講這 8 個範例。想單獨看某一個，就打開 `classroom/` 裡對應的場景，例如 `classroom/07_dissolve.tscn`，按 **F6** 執行。改 `examples/` 裡的 shader，存檔後畫面會馬上更新，可以邊改數字邊看效果。
 
 ## 授權
 

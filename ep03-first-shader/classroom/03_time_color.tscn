@@ -1,0 +1,41 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://examples/03_time_color.gdshader" id="1_ds8y8"]
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 1
+background_color = Color(0.2, 0.36, 0.5, 1)
+sky = SubResource("sky")
+ambient_light_source = 3
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="ShaderMaterial" id="mat3"]
+render_priority = 0
+shader = ExtResource("1_ds8y8")
+
+[sub_resource type="SphereMesh" id="mesh3"]
+radius = 0.9
+height = 1.8
+
+[node name="Example3" type="Node3D" unique_id=836734854]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=629333804]
+environment = SubResource("env")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=620421450]
+transform = Transform3D(-0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, 0.433013, -0.75, 0, 10, 0)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=536156817]
+transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, 0, 1.55, 3)
+fov = 50.0
+
+[node name="Ex3" type="MeshInstance3D" parent="." unique_id=2141486268]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+material_override = SubResource("mat3")
+mesh = SubResource("mesh3")
