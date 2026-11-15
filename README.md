@@ -21,6 +21,7 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 | 1 | [ep01-first-sea](ep01-first-sea/) | 裝好 Godot，不寫程式，搭出第一片會動的海：天空、太陽、海面材質、法線貼圖、AnimationPlayer | [YouTube](https://www.youtube.com/watch?v=GptVdkdfVzY) | 即將推出 |
 | 2 | [ep02-buoys](ep02-buoys/) | 第一次寫程式：用 GDScript 和 sin 波，讓 400 顆浮標排出一片會起伏的海 | 即將推出 | 即將推出 |
 | 3 | [ep03-first-shader](ep03-first-shader/) | 第一個 shader：把浪搬進顯示卡，海面的顏色跟著浮標的浪起伏；附 8 個 shader 小範例 | 即將推出 | 即將推出 |
+| 4 | [ep04-vertex-waves](ep04-vertex-waves/) | 把平面推成浪：用 vertex() 推動頂點，浮標浮在真正起伏的浪上 | 即將推出 | 即將推出 |
 
 ## 第 1 集：搭出第一片海
 
@@ -87,6 +88,34 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 ### 小教室：8 個範例怎麼做、為什麼這樣做
 
 第 3 集另外有一支小教室影片，一個一個講這 8 個範例。想單獨看某一個，就打開 `classroom/` 裡對應的場景，例如 `classroom/07_dissolve.tscn`，按 **F6** 執行。改 `examples/` 裡的 shader，存檔後畫面會馬上更新，可以邊改數字邊看效果。
+
+## 第 4 集：把平面推成浪
+
+![第 4 集成果：海面真的起伏，浮標浮在浪上](images/ep04-preview.gif)
+
+上一集的浪只是顏色，這一集用 `vertex()` 把海面真的推起來：
+
+- 海面 `Sea` 是 1000 × 1000 公尺的 PlaneMesh，Subdivide Width / Depth 都是 999，每 1 公尺一個頂點
+- `water.gdshader` 的 `vertex()` 用和浮標一樣的三個 sin 波推動每個頂點，再用 `varying` 把高度交給 `fragment()` 決定顏色
+- 浪用世界座標算（`MODEL_MATRIX * vec4(VERTEX, 1.0)`），海面移動時浪會留在原地
+- `Buoys` 節點放在 y = 0，浮標剛好一半在水裡，證明 GDScript 和 shader 算的是同一個浪
+
+![線框模式：網格真的起伏了](images/ep04-wireframe.gif)
+
+| 檔案 | 內容 |
+| --- | --- |
+| `main.tscn` | 完成的場景 |
+| `water.gdshader` | 完成的 shader（每行都有中文註解） |
+| `steps/water_A` | 每個頂點都加 2：整片海升高 |
+| `steps/water_B` | 用 sin 推頂點（PlaneMesh 細分改成 0 和 999 比比看） |
+| `steps/water_D` | 換成三個波，和浮標對齊（用本地座標 VERTEX） |
+| `steps/water_E` | 用 varying 把高度交給 fragment() |
+
+想看某一步的樣子：選取 `Sea`，在 Material Override 的 Shader 欄位換成 `steps/` 裡的檔案。
+
+**自己試試本地座標和世界座標的差別**：把 Shader 換成 `steps/water_E.gdshader`（本地座標），再把 `Sea` 的 Position X 改成 8，按 F5，浮標就對不上了；換回 `water.gdshader`（世界座標），浮標又回到水面上。試完記得把 Position X 改回 0。
+
+看網格：3D 畫面左上角的「透視」選單 →「顯示線框」。
 
 ## 授權
 
