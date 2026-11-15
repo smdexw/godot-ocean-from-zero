@@ -22,6 +22,7 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 | 2 | [ep02-buoys](ep02-buoys/) | 第一次寫程式：用 GDScript 和 sin 波，讓 400 顆浮標排出一片會起伏的海 | 即將推出 | 即將推出 |
 | 3 | [ep03-first-shader](ep03-first-shader/) | 第一個 shader：把浪搬進顯示卡，海面的顏色跟著浮標的浪起伏；附 8 個 shader 小範例 | 即將推出 | 即將推出 |
 | 4 | [ep04-vertex-waves](ep04-vertex-waves/) | 把平面推成浪：用 vertex() 推動頂點，浮標浮在真正起伏的浪上 | 即將推出 | 即將推出 |
+| 5 | [ep05-gerstner](ep05-gerstner/) | 尖尖的浪：三個 Gerstner 波疊在一起，浮標跟著水畫圓 | 即將推出 | 即將推出 |
 
 ## 第 1 集：搭出第一片海
 
@@ -116,6 +117,32 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 **自己試試本地座標和世界座標的差別**：把 Shader 換成 `steps/water_E.gdshader`（本地座標），再把 `Sea` 的 Position X 改成 8，按 F5，浮標就對不上了；換回 `water.gdshader`（世界座標），浮標又回到水面上。試完記得把 Position X 改回 0。
 
 看網格：3D 畫面左上角的「透視」選單 →「顯示線框」。
+
+## 第 5 集：尖尖的浪：Gerstner 波
+
+![第 5 集成果：浪峰尖尖的，浮標跟著水畫圓](images/ep05-preview.gif)
+
+真實的海浪浪峰尖、浪谷平，因為水不只上下動，還在畫圓。
+
+- `water.gdshader` 的 `gerstner()`：用方向（向量、`normalize`、`dot`）、陡度、波長算出一個波的位移；速度用深水波的公式 `sqrt(9.8 / k)`
+- 三個波放在 `uniform vec4 waves[3]`，用 for 迴圈加起來
+- `buoys.gd` 用同一個公式、同一組數字，浮標會跟著水前後擺動
+
+![從海面的邊緣看：左邊 sin 波，右邊 Gerstner 波](images/ep05-side.gif)
+
+| 檔案 | 內容 |
+| --- | --- |
+| `main.tscn` | 完成的場景 |
+| `water.gdshader` | 完成的 shader（每行都有中文註解） |
+| `buoys.gd` | 浮標也用 Gerstner 波 |
+| `steps/water_A0` | 對照用：只有上下的 sin 波 |
+| `steps/water_A` | 一個 Gerstner 波：多了前後 |
+| `steps/water_B` | 換方向：向量、normalize、dot |
+| `steps/water_C` | 速度從物理來：`sqrt(9.8 / k)` |
+
+**三個波的數字在哪裡**：Godot 的 uniform 陣列不能在 shader 裡寫預設值，所以數字填在 `Sea` 的材質裡。選取 `Sea` → Material Override → Shader Parameters → **Waves**，每個 vec4 是（方向 x、方向 y、陡度、波長）。改了這裡，也要把 `Buoys` 的 **Waves** 改成一樣，浮標才會浮在浪上。
+
+陡度加起來最好不要超過 1，不然浪峰會打結。
 
 ## 授權
 
