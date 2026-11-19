@@ -23,6 +23,7 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 | 3 | [ep03-first-shader](ep03-first-shader/) | 第一個 shader：把浪搬進顯示卡，海面的顏色跟著浮標的浪起伏；附 8 個 shader 小範例 | 即將推出 | 即將推出 |
 | 4 | [ep04-vertex-waves](ep04-vertex-waves/) | 把平面推成浪：用 vertex() 推動頂點，浮標浮在真正起伏的浪上 | 即將推出 | 即將推出 |
 | 5 | [ep05-gerstner](ep05-gerstner/) | 尖尖的浪：三個 Gerstner 波疊在一起，浮標跟著水畫圓 | 即將推出 | 即將推出 |
+| 6 | [ep06-normals](ep06-normals/) | 讓浪有立體感：算出法線，浪有亮面和暗面；附光照與陰影實驗室 | 即將推出 | 即將推出 |
 
 ## 第 1 集：搭出第一片海
 
@@ -143,6 +144,34 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 **三個波的數字在哪裡**：Godot 的 uniform 陣列不能在 shader 裡寫預設值，所以數字填在 `Sea` 的材質裡。選取 `Sea` → Material Override → Shader Parameters → **Waves**，每個 vec4 是（方向 x、方向 y、陡度、波長）。改了這裡，也要把 `Buoys` 的 **Waves** 改成一樣，浮標才會浮在浪上。
 
 陡度加起來最好不要超過 1，不然浪峰會打結。
+
+## 第 6 集：讓浪有立體感：法線與光照
+
+![第 6 集成果：左邊沒算法線，右邊算出法線](images/ep06-preview.gif)
+
+上一集的浪推起來了，看起來卻是平的：光照要靠「法線」（表面朝向哪裡），頂點被推動之後法線還是朝正上方。
+
+- `water.gdshader` 的 `vertex()`：「看看鄰居」，往 x、z 各走 `neighbor_step`（0.1 公尺），算出那裡的水被推到哪裡
+- 從這裡指向鄰居的兩個方向就是兩個斜面，`cross(along_z, along_x)` 外積再 `normalize`，交給 `NORMAL`
+- 三個波的數字和第 5 集一樣（`Sea` 材質的 **Waves** 和 `Buoys` 的 **Waves**）
+
+| 檔案 | 內容 |
+| --- | --- |
+| `main.tscn` | 完成的場景（Sun 打開陰影） |
+| `water.gdshader` | 完成的 shader（每行都有中文註解） |
+| `buoys.gd` | 第 5 集的 Gerstner 浮標 |
+| `steps/water_A` | 把法線畫成顏色：還沒算，整片一個顏色 |
+| `steps/water_B` | 把算出來的法線畫成顏色 |
+| `steps/water_analytic` | 補充：直接用公式（偏微分）算法線，結果幾乎一樣、只算 1 次浪 |
+| `lighting_lab.tscn`、`lighting_lab.gd` | 小教室：光照與陰影實驗室 |
+
+### 小教室：光照與陰影實驗室
+
+![陰影打開和關掉](images/ep06-lab.gif)
+
+在檔案系統雙擊 `lighting_lab.tscn`，選取最上面的 **LightingLab** 節點，屬性檢視器裡就能調 Sun Height（太陽高度）、Sun Direction（方向）、Energy（亮度）、Color（顏色）、Shadows（陰影）。腳本有 `@tool`，**不用按執行**，拉數字畫面就會馬上變。
+
+打勾 **Auto Day**，太陽會從日出走到日落，顏色和影子一起變。它在編輯器裡也會一直跑，看完記得把勾拿掉。
 
 ## 授權
 
