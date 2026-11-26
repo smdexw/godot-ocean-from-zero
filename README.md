@@ -24,6 +24,7 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 | 4 | [ep04-vertex-waves](ep04-vertex-waves/) | 把平面推成浪：用 vertex() 推動頂點，浮標浮在真正起伏的浪上 | 即將推出 | 即將推出 |
 | 5 | [ep05-gerstner](ep05-gerstner/) | 尖尖的浪：三個 Gerstner 波疊在一起，浮標跟著水畫圓 | 即將推出 | 即將推出 |
 | 6 | [ep06-normals](ep06-normals/) | 讓浪有立體感：算出法線，浪有亮面和暗面；附光照與陰影實驗室 | 即將推出 | 即將推出 |
+| 7 | [ep07-fresnel](ep07-fresnel/) | 為什麼遠處的海像鏡子：Fresnel 效果，近處透藍、遠處反射天空；附反射實驗室 | 即將推出 | 即將推出 |
 
 ## 第 1 集：搭出第一片海
 
@@ -172,6 +173,34 @@ YouTube 教學系列「零基礎做遊戲海洋」每一集的 Godot 範例專�
 在檔案系統雙擊 `lighting_lab.tscn`，選取最上面的 **LightingLab** 節點，屬性檢視器裡就能調 Sun Height（太陽高度）、Sun Direction（方向）、Energy（亮度）、Color（顏色）、Shadows（陰影）。腳本有 `@tool`，**不用按執行**，拉數字畫面就會馬上變。
 
 打勾 **Auto Day**，太陽會從日出走到日落，顏色和影子一起變。它在編輯器裡也會一直跑，看完記得把勾拿掉。
+
+## 第 7 集：為什麼遠處的海像鏡子：Fresnel 與天空反射
+
+![第 7 集成果：左邊上一集，右邊近處透藍、遠處反射天空](images/ep07-preview.gif)
+
+往下看水是透明的藍，往遠處看海面像鏡子：水面反射多少，要看從什麼角度看。往下看只反射 2%，貼著水面看幾乎全部反射，這叫 Fresnel 效果。
+
+- `water.gdshader` 的 `fragment()`：`dot(NORMAL, VIEW)` 是「正對著看的程度」，`0.02 + 0.98 * pow(1.0 - facing, 5.0)` 算出反射多少
+- 水本身的顏色放在 `EMISSION`，乘上 `1.0 - fresnel`：反射越多，看到的水越少
+- 天空的反射和太陽的亮點交給 Godot：`SPECULAR = 0.35` 剛好是水（正對著看反射 2%），`ROUGHNESS` 0.05
+- `main.tscn` 的天空調藍、地平線調亮：遠處的海反射的就是天空
+
+| 檔案 | 內容 |
+| --- | --- |
+| `main.tscn` | 完成的場景 |
+| `water.gdshader` | 完成的 shader（每行都有中文註解） |
+| `buoys.gd` | 第 5 集的 Gerstner 浮標 |
+| `steps/water_A` | 把 Fresnel 畫成黑白：近處黑，遠處白 |
+| `steps/water_B` | 用 `mix` 把水的顏色和一個天空色混在一起 |
+| `reflection_lab.tscn`、`reflection_lab.gd` | 小教室：反射實驗室 |
+
+### 小教室：天空和三個材質旋鈕
+
+![反射實驗室：上排 Metallic 0，下排 Metallic 1，Roughness 從左到右是 0 到 1](images/ep07-lab.jpg)
+
+- **天空在哪裡改**：選取 `WorldEnvironment`，展開 Environment → Sky → Sky Material。Sky 段的 Horizon Color 就是遠處的海反射的顏色，改成橘色試試看。
+- **材質的三個反射旋鈕**：雙擊 `reflection_lab.tscn`，選取一顆球，展開 Surface Material Override 裡的材質，改 Roughness（多粗糙）、Metallic（是不是金屬）、Specular（反射多強）。
+- **反射實驗室**：選取最上面的 **ReflectionLab** 節點，在屬性檢視器改 Sky Top、Sky Horizon、Sun Height、Sea Roughness、Sea Specular。腳本有 `@tool`，**不用按執行**，改數字畫面就會馬上變。
 
 ## 授權
 

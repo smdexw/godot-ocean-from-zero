@@ -1,0 +1,226 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://water.gdshader" id="2_water"]
+[ext_resource type="Script" path="res://reflection_lab.gd" id="3_lab"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+sky_top_color = Color(0.22, 0.42, 0.72, 1)
+sky_horizon_color = Color(0.72, 0.8, 0.88, 1)
+ground_bottom_color = Color(0.5, 0.6, 0.7, 1)
+ground_horizon_color = Color(0.72, 0.8, 0.88, 1)
+
+[sub_resource type="Sky" id="Sky_sky"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_env"]
+background_mode = 2
+sky = SubResource("Sky_sky")
+tonemap_mode = 2
+fog_enabled = true
+fog_density = 0.0012
+fog_sky_affect = 0.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_noise"]
+frequency = 0.02
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ripples"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_noise")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_water"]
+render_priority = 0
+shader = ExtResource("2_water")
+shader_parameter/ripple_texture = SubResource("NoiseTexture2D_ripples")
+shader_parameter/waves = PackedVector4Array(1, 0, 0.35, 16, 0.6, 0.8, 0.25, 9.6, -0.4, 0.9, 0.15, 5.6)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_sea"]
+size = Vector2(1000, 1000)
+subdivide_width = 999
+subdivide_depth = 999
+
+[sub_resource type="SphereMesh" id="SphereMesh_ball"]
+radius = 0.7
+height = 1.4
+
+[sub_resource type="StandardMaterial3D" id="Mat_0_0"]
+albedo_color = Color(0.8, 0.12, 0.1, 1)
+metallic = 0.0
+roughness = 0.0
+
+[sub_resource type="StandardMaterial3D" id="Mat_0_1"]
+albedo_color = Color(0.8, 0.12, 0.1, 1)
+metallic = 0.0
+roughness = 0.25
+
+[sub_resource type="StandardMaterial3D" id="Mat_0_2"]
+albedo_color = Color(0.8, 0.12, 0.1, 1)
+metallic = 0.0
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_0_3"]
+albedo_color = Color(0.8, 0.12, 0.1, 1)
+metallic = 0.0
+roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="Mat_0_4"]
+albedo_color = Color(0.8, 0.12, 0.1, 1)
+metallic = 0.0
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Mat_1_0"]
+albedo_color = Color(0.85, 0.85, 0.85, 1)
+metallic = 1.0
+roughness = 0.0
+
+[sub_resource type="StandardMaterial3D" id="Mat_1_1"]
+albedo_color = Color(0.85, 0.85, 0.85, 1)
+metallic = 1.0
+roughness = 0.25
+
+[sub_resource type="StandardMaterial3D" id="Mat_1_2"]
+albedo_color = Color(0.85, 0.85, 0.85, 1)
+metallic = 1.0
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_1_3"]
+albedo_color = Color(0.85, 0.85, 0.85, 1)
+metallic = 1.0
+roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="Mat_1_4"]
+albedo_color = Color(0.85, 0.85, 0.85, 1)
+metallic = 1.0
+roughness = 1.0
+
+[node name="ReflectionLab" type="Node3D"]
+script = ExtResource("3_lab")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, 0.433013, -0.75, 0, 50, 0)
+shadow_enabled = true
+
+[node name="Sea" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_sea")
+material_override = SubResource("ShaderMaterial_water")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, 0, 5, 0)
+far = 10000.0
+
+[node name="Balls" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.5)
+
+[node name="Ball00" type="MeshInstance3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4, 4.6, 0)
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("Mat_0_0")
+
+[node name="Ball01" type="MeshInstance3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 4.6, 0)
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("Mat_0_1")
+
+[node name="Ball02" type="MeshInstance3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 4.6, 0)
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("Mat_0_2")
+
+[node name="Ball03" type="MeshInstance3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 4.6, 0)
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("Mat_0_3")
+
+[node name="Ball04" type="MeshInstance3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4, 4.6, 0)
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("Mat_0_4")
+
+[node name="Ball10" type="MeshInstance3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4, 2.6999999999999997, 0)
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("Mat_1_0")
+
+[node name="Ball11" type="MeshInstance3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 2.6999999999999997, 0)
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("Mat_1_1")
+
+[node name="Ball12" type="MeshInstance3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.6999999999999997, 0)
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("Mat_1_2")
+
+[node name="Ball13" type="MeshInstance3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 2.6999999999999997, 0)
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("Mat_1_3")
+
+[node name="Ball14" type="MeshInstance3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4, 2.6999999999999997, 0)
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("Mat_1_4")
+
+[node name="Rough0" type="Label3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4, 5.95, 0)
+billboard = 1
+font_size = 48
+outline_size = 14
+pixel_size = 0.006
+text = "Roughness
+0"
+
+[node name="Rough1" type="Label3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 5.95, 0)
+billboard = 1
+font_size = 48
+outline_size = 14
+pixel_size = 0.006
+text = "Roughness
+0.25"
+
+[node name="Rough2" type="Label3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 5.95, 0)
+billboard = 1
+font_size = 48
+outline_size = 14
+pixel_size = 0.006
+text = "Roughness
+0.5"
+
+[node name="Rough3" type="Label3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 5.95, 0)
+billboard = 1
+font_size = 48
+outline_size = 14
+pixel_size = 0.006
+text = "Roughness
+0.75"
+
+[node name="Rough4" type="Label3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4, 5.95, 0)
+billboard = 1
+font_size = 48
+outline_size = 14
+pixel_size = 0.006
+text = "Roughness
+1"
+
+[node name="Metal0" type="Label3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 4.6, 0)
+billboard = 1
+font_size = 48
+outline_size = 14
+pixel_size = 0.006
+text = "Metallic 0"
+
+[node name="Metal1" type="Label3D" parent="Balls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 2.6999999999999997, 0)
+billboard = 1
+font_size = 48
+outline_size = 14
+pixel_size = 0.006
+text = "Metallic 1"
